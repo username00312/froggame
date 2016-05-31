@@ -1,0 +1,165 @@
+<head>
+
+<!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Include jQuery Mobile stylesheets -->
+<link rel="stylesheet" href="jquery-css.css">
+
+<!-- Include the jQuery library -->
+<script src="jquery.js"></script>
+
+<!-- Include the jQuery Mobile library -->
+<script src="jquery-mobile.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var delayTime;
+	var interval;
+	var pos;
+	var pageColor;
+	var clickFlag = false;
+	var frog = $('#frog');
+	var startPage = $('#start-game');
+	var score = $('#score');
+	var totalScore = $('#total-score');	
+	var currentScore = 0;
+	
+	$(document).on('click','#start',function(){
+		startPage.removeClass(pageColor);
+		var rand = Math.floor((Math.random() * 5) + 1);
+			pageColor = 'b'+rand;
+		startPage.addClass(pageColor);
+		delayTime = 3000;
+		currentScore = 0;
+		score.html(0);
+		setTimeout(function(){ startGame(); },1000);
+	});
+	
+	function startGame(){
+		clickFlag = false;
+		frog.removeClass(pos);
+		var randomNumber = Math.floor((Math.random() * 5) + 1); // generate random number between 1 and 5
+		pos = 'pos'+randomNumber;	
+		frog.addClass(pos);
+		frog.show();
+		if(currentScore == 10){
+			delayTime = 2000;
+		}
+		if(currentScore == 25){
+			delayTime = 1500;
+		}
+		if(currentScore == 50){
+			delayTime = 1000;
+		}
+		if(currentScore == 70){
+			delayTime = 800;
+		}
+		interval = setTimeout(function(){ 
+			frog.hide();
+			totalScore.html(currentScore);
+			$.mobile.navigate( "#reload", { transition : "slide", info: "info about the #reload hash" });
+		},delayTime);
+	}
+	frog.click(function(){
+	  if(!clickFlag){
+		clickFlag = true;
+		currentScore++;
+		score.html(currentScore);
+		clearTimeout(interval);
+		startGame();
+	  }	
+	});
+
+});	
+</script>
+
+<style>
+.circle{
+    height: 40px;
+    width: 100px;
+	position: absolute;
+}
+.frog-image{
+	position:absolute;
+	margin-top: -65px;
+    margin-right: -10px;
+	z-index:5;
+	display:none;
+}
+.pos1{
+    top: 150px;
+    right: 30px;
+}
+.pos2{
+    top: 200px;
+}
+.pos3{
+    top: 300px;
+    right: 75px;
+}
+.pos4{
+    top: 430px;
+}
+.pos5{
+    top: 450px;
+    right: 20px;
+}
+.b1{ background-color: skyblue; }
+.b2{ background-color: pink; }
+.b3{ background-color: blueviolet; }
+.b4{ background-color: coral; }
+.b5{ background-color: lightslategray; }
+</style>
+
+</head>
+<body>
+
+<div data-role="page" id="homepage">
+  <div data-role="header">
+    <h1>Frog Game</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <p style="text-align:center;">Welcome! To Frog Game</p>
+	<img style="width:100%" src="frog.png" />
+    <a id="start" href="#start-game" class="ui-btn ui-icon-arrow-r ui-btn-icon-right" data-transition="flip">Start</a>
+  </div>
+
+  <div data-role="footer">
+    <h1>Arfan Haider &copy; 13-ARID-1245</h1>
+  </div>
+</div> 
+
+<div data-role="page" id="start-game">
+  <div data-role="header">
+  <h1><span>Score</span> <span id="score">0</span></h1>
+    <!--<h1><a href="#homepage" class="ui-btn ui-icon-arrow-l ui-btn-icon-left" data-transition="flip">Back</a></h1>-->
+  </div>
+
+  <div data-role="main" class="ui-content">
+	<img class="circle pos1" src="circle.png" />
+	<img class="circle pos2" src="circle.png" />
+	<img class="circle pos3" src="circle.png" />
+	<img class="circle pos4" src="circle.png" />
+	<img class="circle pos5" src="circle.png" />
+	<img id="frog" class="frog-image" src="frog.png" />
+  </div>
+
+</div> 
+
+<div data-role="page" style="background-color:white;" id="reload">
+  <div data-role="header">
+    <h1><a href="#homepage" class="ui-btn ui-icon-arrow-l ui-btn-icon-left" data-transition="flip">Homepage</a></h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <img style="width:100%" src="frogend.png" />
+	<h1 style="text-align:center;"><span>score <span id="total-score"></span></h1>
+	<a id="reload" href="#homepage" class="ui-btn ui-icon-refresh ui-btn-icon-right" data-transition="flip">Play Again</a>
+  </div>
+
+</div>
+
+</body>
+</html>
